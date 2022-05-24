@@ -15,12 +15,19 @@ namespace backedn_aiepflix.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AccountController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AccountController(
+            UserManager<IdentityUser> userManager, 
+            RoleManager<IdentityRole> roleManager, 
+            IConfiguration configuration,
+            SignInManager<IdentityUser> signInManager
+            )
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _signInManager = signInManager;
         }
 
         [HttpPost]
@@ -36,7 +43,32 @@ namespace backedn_aiepflix.Controllers
             {
                 return BadRequest("Email o Password inválidos");
             }
-        } 
+        }
+
+        [HttpPost("login")]
+
+        public async Task<ActionResult<UserToken>> Login(UserInfo userInfo)
+        {
+            var result = await _signInManager.PasswordSignInAsync(
+                userInfo.Email,
+                userInfo.Password,
+                isPersistent: false,
+                lockoutOnFailure: false
+                );
+
+            if (result.Succeeded)
+            {
+                var usuario = await _userManager.FindByEmailAsync(userInfo.Email);
+                var roles = await _userManager.GetRolesAsync(usuario);
+
+                return BuildToken(userInfo, roles);
+            }
+            else
+            {
+                return new UserToken { Status = "error"};
+            }
+        }
+
 
         private UserToken BuildToken(UserInfo userInfo, IList<string> roles)
         {
@@ -70,7 +102,8 @@ namespace backedn_aiepflix.Controllers
             return new UserToken()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
+                Expiration = expiration,
+                Status = "ok"
             };
         } 
     }

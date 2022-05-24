@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backedn_aiepflix.Controllers
 {
@@ -6,12 +8,7 @@ namespace backedn_aiepflix.Controllers
     [Route("[controller]")]
     public class TestController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok("Funciona");
-        }
-
+        [AllowAnonymous]
         [HttpGet("get2")]
         public ActionResult<TestClass> Get2()
         {
@@ -20,7 +17,14 @@ namespace backedn_aiepflix.Controllers
             return obj;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Petición Get");
+        }
+
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles ="admin")]
         public IActionResult Post()
         {
             return Ok("Post");
