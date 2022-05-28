@@ -27,6 +27,6 @@ namespace backedn_aiepflix
 
 
         public DbSet<Pelicula> Peliculas { get; set; }
-
+        public DbSet<RUT> RUT { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backedn_aiepflix;
 
@@ -11,9 +12,10 @@ using backedn_aiepflix;
 namespace backedn_aiepflix.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220527013855_rutid")]
+    partial class rutid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,12 +50,6 @@ namespace backedn_aiepflix.Migrations
 
             modelBuilder.Entity("backedn_aiepflix.Entities.RUT", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<bool>("AfectoIVA")
                         .HasColumnType("bit");
 
@@ -62,6 +58,9 @@ namespace backedn_aiepflix.Migrations
 
                     b.Property<DateTime>("FechaInicioAct")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -74,8 +73,6 @@ namespace backedn_aiepflix.Migrations
                     b.Property<string>("Rut")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
 
                     b.ToTable("RUT");
                 });
@@ -110,7 +107,7 @@ namespace backedn_aiepflix.Migrations
                         new
                         {
                             Id = "91fcea67-43eb-4ece-8e5a-c0f32c3bbff5",
-                            ConcurrencyStamp = "d3ee9d59-3232-4e2e-9ae9-f2a27c7801ae",
+                            ConcurrencyStamp = "2a9c96b7-c8e9-4ee4-b02a-3ea18e84938e",
                             Name = "admin",
                             NormalizedName = "admin"
                         });
